@@ -1,0 +1,71 @@
+# Explicit project name: containers, volumes and the network are all scoped to
+# it, so a second deployment on the same host stays isolated instead of joining
+# this one's network.
+name: emp_profile
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: emp_profile_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: emp_profile_mvp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: emp_profile_api
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/emp_profile_mvp
+      UPLOAD_DIR: /app/uploads
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      # Mount source at /app (the WORKDIR) so `uvicorn main:app` finds it.
+      - ../backend:/app
+      # Uploaded documents live on a named volume, not in the image.
+      - uploads_data:/app/uploads
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: emp_profile_web
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    volumes:
+      - ../frontend:/app
+      # Anonymous volume keeps the image's node_modules from being shadowed
+      # by the bind mount above (otherwise `vite` is not found).
+      - /app/node_modules
+
+volumes:
+  # Named without `external: true` so a first-time deployment creates them.
+  # Compose scopes them to the project: emp_profile_postgres_data / _uploads_data.
+  postgres_data:
+  uploads_data:
+
+# The default network is deliberately left unnamed so Compose derives it per
+# project (<project>_default). Pinning a fixed name makes every project that
+# uses this file join the SAME network, and service names such as "postgres"
+# then resolve across instances -- a second deployment would silently talk to
+# the first one's database.
