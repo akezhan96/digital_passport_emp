@@ -97,7 +97,7 @@ def read_token(token: str) -> Optional[dict]:
 
     if not isinstance(payload, dict) or not isinstance(payload.get("exp"), (int, float)):
         return None
-    if payload.get("exp", 0) < time.time() or payload.get("role") not in ("admin", "viewer"):
+    if payload.get("exp", 0) < time.time() or payload.get("role") not in ("admin", "viewer", "demo_editor"):
         return None
     return payload
 
@@ -199,6 +199,13 @@ async def auth_middleware(request: Request, call_next):
         if origin and origin not in allowed:
             return JSONResponse(status_code=403, content={"detail": "Недопустимый источник запроса / Сұрау көзі рұқсат етілмеген"})
 
+    if payload["role"] == "demo_editor":
+        if (payload["sub"] != getattr(request.app.state, "demo_editor_username", None)
+                or path == "/api/v1/admin" or path.startswith("/api/v1/admin/")):
+            return JSONResponse(status_code=403, content={"detail": "Недостаточно прав / Рұқсат жеткіліксіз"})
+        # HR handlers already implement edits for admins. The service maintenance
+        # routes stay reserved for the operator, and the signed role remains distinct.
+        payload = {**payload, "role": "admin"}
     if path_requires_admin(request.method, path) and payload.get("role") != "admin":
         return JSONResponse(
             status_code=403,

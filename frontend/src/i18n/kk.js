@@ -155,7 +155,7 @@ export const kk = {
     signOut: 'Шығу',
     viewerNotice: 'Қарау және талдау режимі. Деректерді өзгерту қолжетімсіз.',
     readOnly: 'Тек қарау',
-    roles: { admin: 'Әкімші', viewer: 'Қарау және талдау' },
+    roles: { admin: 'Әкімші', viewer: 'Қарау және талдау', demo_editor: 'Демостенд редакторы' },
   },
   common: {
     loading: 'Жүктелуде…',

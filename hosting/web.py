@@ -38,6 +38,9 @@ if not (STATIC / 'index.html').is_file() or not (STATIC / 'assets').is_dir():
 from database import engine
 from main import app as api
 
+# Only the wrapper which verified the synthetic database enables this role.
+api.state.demo_editor_username = os.getenv('DEMO_EDITABLE_GUEST')
+
 
 def health(request):
     # The public probe reports connectivity without returning migration or deployment details.

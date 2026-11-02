@@ -73,8 +73,8 @@ def _accounts():
     return accounts
 
 
-def _add_initial_viewer(connection):
-    """Optionally create a guest once in the marked demo DB, without changing existing users."""
+def _sync_demo_guest(connection):
+    """Only reconcile the configured guest in the marked synthetic database."""
     credential = os.getenv("DEMO_INITIAL_VIEWER", "")
     if not credential:
         return
@@ -82,13 +82,21 @@ def _add_initial_viewer(connection):
     expected_digest = rf"pbkdf2\${PBKDF2_ROUNDS}\$[0-9a-f]{{32}}\$[0-9a-f]{{64}}"
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,60}", username) or not re.fullmatch(expected_digest, digest):
         raise ValueError("DEMO_INITIAL_VIEWER requires username:password_hash.")
+    if username.casefold() in {os.getenv(key, "").strip().casefold()
+                               for key in ("DEMO_ADMIN_USERNAME", "DEMO_VIEWER_USERNAME")}:
+        raise RuntimeError("Guest username is reserved for another account.")
+    role = "demo_editor" if os.getenv("DEMO_EDITABLE_GUEST") == username else "viewer"
     with Session(bind=connection, join_transaction_mode="create_savepoint") as db:
         existing = db.query(User).filter_by(username=username).one_or_none()
         if existing is not None:
-            if existing.role != "viewer" or existing.password_hash != digest:
+            if existing.role not in ("viewer", "demo_editor") or existing.password_hash != digest:
                 raise RuntimeError("Guest username already belongs to another account.")
+            if existing.role != role:
+                existing.role = role
+                existing.auth_version = (existing.auth_version or 0) + 1
+                db.commit()
             return
-        db.add(User(username=username, password_hash=digest, role="viewer",
+        db.add(User(username=username, password_hash=digest, role=role,
                     display_name=username, is_active=True))
         db.commit()
 
@@ -185,7 +193,7 @@ def bootstrap_demo():
         _check_database(connection)
         connection.execute(text("SELECT pg_advisory_xact_lock(61652024)"))
         if _is_ready(connection):
-            _add_initial_viewer(connection)
+            _sync_demo_guest(connection)
             return False
         # Refuse other people's objects in any user schema, even if there are no employees.
         # Extension-owned objects installed by the PostgreSQL provider are allowed.
@@ -208,7 +216,7 @@ def bootstrap_demo():
             db.commit()
         connection.execute(text(f"CREATE TABLE {MARKER_TABLE} (fixture text PRIMARY KEY)"))
         connection.execute(text(f"INSERT INTO {MARKER_TABLE} (fixture) VALUES (:marker)"), {"marker": MARKER})
-        _add_initial_viewer(connection)
+        _sync_demo_guest(connection)
     return True
 
 

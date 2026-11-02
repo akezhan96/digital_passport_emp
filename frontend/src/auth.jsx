@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import http, { api, setAuthToken } from './api'
+import { renderDemo } from './renderDemo'
 const AuthContext = createContext(null)
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -30,7 +31,8 @@ export function AuthProvider({ children }) {
     })
     return () => http.interceptors.response.eject(id)
   }, [clear])
-  return <AuthContext.Provider value={{ user, session: user, isAdmin: user?.role === 'admin',
+  const canManageRecords = user?.role === 'admin' || (renderDemo && user?.role === 'demo_editor')
+  return <AuthContext.Provider value={{ user, session: user, isAdmin: canManageRecords,
     isAuthenticated: Boolean(user), checking, login, logout }}>{children}</AuthContext.Provider>
 }
 export function useAuth() { return useContext(AuthContext) }

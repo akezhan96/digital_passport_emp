@@ -155,7 +155,7 @@ export const ru = {
     signOut: 'Выйти',
     viewerNotice: 'Режим просмотра и анализа. Изменение данных недоступно.',
     readOnly: 'Только просмотр',
-    roles: { admin: 'Администратор', viewer: 'Просмотр и анализ' },
+    roles: { admin: 'Администратор', viewer: 'Просмотр и анализ', demo_editor: 'Редактор демостенда' },
   },
   common: {
     loading: 'Загрузка…',

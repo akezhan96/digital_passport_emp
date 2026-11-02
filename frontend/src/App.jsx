@@ -69,7 +69,7 @@ function Shell() {
           {LANGUAGES.map(l => <button key={l.code} className={`lang-btn ${lang === l.code ? 'active' : ''}`}
             onClick={() => setLang(l.code)} aria-pressed={lang === l.code}>{l.short}</button>)}</div>
           <ThemeSwitch /><div className="user-block"><strong>{user?.displayName || user?.username}</strong>
-            <small>{t(`auth.roles.${isAdmin ? 'admin' : 'viewer'}`)}</small></div>
+            <small>{t(`auth.roles.${user.role}`)}</small></div>
           <button className="btn btn-ghost btn-sm" onClick={() => { if (confirmUnsavedLeave()) logout() }}>{t('auth.signOut')}</button>
         </div>
       </header>
