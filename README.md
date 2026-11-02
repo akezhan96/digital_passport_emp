@@ -8,6 +8,8 @@
 
 ## 2. Запустите стенд на Render
 
+[Развернуть эту ветку на Render](https://render.com/deploy?repo=https://github.com/akezhan96/digital_passport_emp/tree/render-demo). Ссылка открывает мастер с нужным репозиторием и веткой. После входа проверьте два ресурса Free и нажмите **Deploy Blueprint**. Ручной путь приведён ниже.
+
 1. Войдите на [dashboard.render.com](https://dashboard.render.com/). Выберите рабочее пространство, в котором доступна бесплатная база PostgreSQL.
 2. Нажмите **New → Blueprint**. Подключите GitHub и предоставьте Render доступ к репозиторию `akezhan96/digital_passport_emp`. При выборе разрешений достаточно доступа к одному репозиторию.
 3. Выберите репозиторий, ветку **render-demo**, путь **render.yaml**. Название Blueprint, например `digital-profile-demo`.
