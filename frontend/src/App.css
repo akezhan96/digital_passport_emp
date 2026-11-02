@@ -1,0 +1,411 @@
+/* Calm, data-dense, no marketing noise. Trust comes from alignment,
+   readable tables and predictable status colours. */
+
+:root {
+  color-scheme: light;
+
+  /* A neutral ramp used by convention: 50-300 are surfaces and borders,
+     400-900 are text. The dark theme reverses the ramp, so every rule below
+     keeps working without knowing which theme is active. */
+  --slate-50:  #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-900: #0f172a;
+
+  /* Raised surfaces: cards, the top bar, the sidebar. A literal white cannot
+     be themed, and these were the six places that had one. */
+  --surface:   #ffffff;
+  --surface-2: #f8fafc;
+  --on-accent: #ffffff;
+
+  --accent:      #0f6b6b;
+  --accent-dark: #0a5252;
+  --accent-soft: #e6f2f2;
+
+  --ok:      #1a7f37;
+  --ok-bg:   #e8f5ec;
+  --warn:    #a86800;
+  --warn-bg: #fdf3e0;
+  --bad:     #b42318;
+  --bad-bg:  #fde8e6;
+  --bad-border:  #f2c4bf;
+  --warn-border: #f0dcb0;
+  --conf:     #6941c6;
+  --conf-bg:  #f3efff;
+  --conf-border: #ddd0ff;
+
+  --radius: 6px;
+  --shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 1px 3px rgba(15, 23, 42, .08);
+}
+
+/* ---------- dark ----------
+   Declared once and applied two ways: `data-theme="dark"` when the reader has
+   chosen it, and `prefers-color-scheme` when they have not. The `:not()` guard
+   is what makes an explicit choice of light survive a dark system setting --
+   without it the media query would override the reader on their own machine. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --slate-50:  #1b2230;
+    --slate-100: #151b26;
+    --slate-200: #2b3444;
+    --slate-300: #3b4658;
+    --slate-400: #64748b;
+    --slate-500: #94a3b8;
+    --slate-600: #b4c0cf;
+    --slate-700: #cfd8e3;
+    --slate-900: #eef2f7;
+
+    --surface:   #1e2532;
+    --surface-2: #232b3a;
+    --on-accent: #06211f;
+
+    /* Teal has to come up in lightness to stay legible on a dark ground;
+       the light theme's ink-dark accent would disappear into it. */
+    --accent:      #4fbfb0;
+    --accent-dark: #6fd4c5;
+    --accent-soft: #1d3b3a;
+
+    --ok:      #63cc85;
+    --ok-bg:   #16311f;
+    --warn:    #e0a640;
+    --warn-bg: #362a12;
+    --bad:     #ff8a7a;
+    --bad-bg:  #3a1d1a;
+    --bad-border:  #5e2b26;
+    --warn-border: #5a4418;
+    --conf:     #b79dff;
+    --conf-bg:  #2a2440;
+    --conf-border: #3d3460;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 1px 3px rgba(0, 0, 0, .3);
+  }
+}
+
+:root[data-theme="dark"] {
+  --slate-50:  #1b2230;
+  --slate-100: #151b26;
+  --slate-200: #2b3444;
+  --slate-300: #3b4658;
+  --slate-400: #64748b;
+  --slate-500: #94a3b8;
+  --slate-600: #b4c0cf;
+  --slate-700: #cfd8e3;
+  --slate-900: #eef2f7;
+
+  --surface:   #1e2532;
+  --surface-2: #232b3a;
+  --on-accent: #06211f;
+
+  --accent:      #4fbfb0;
+  --accent-dark: #6fd4c5;
+  --accent-soft: #1d3b3a;
+
+  --ok:      #63cc85;
+  --ok-bg:   #16311f;
+  --warn:    #e0a640;
+  --warn-bg: #362a12;
+  --bad:     #ff8a7a;
+  --bad-bg:  #3a1d1a;
+  --bad-border:  #5e2b26;
+  --warn-border: #5a4418;
+  --conf:     #b79dff;
+  --conf-bg:  #2a2440;
+  --conf-border: #3d3460;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 1px 3px rgba(0, 0, 0, .3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--slate-900);
+  background: var(--slate-100);
+  transition: background-color .15s ease, color .15s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--slate-200);
+  position: sticky; top: 0; z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: var(--radius);
+  background: var(--accent); color: var(--on-accent);
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 13px; letter-spacing: .5px;
+}
+.brand-title { font-weight: 650; font-size: 15px; }
+
+.lang-switch, .theme-switch { display: flex; gap: 2px;
+  background: var(--slate-100); padding: 3px; border-radius: var(--radius); }
+/* The theme control is a segmented three-state, not an on/off toggle: a
+   two-state switch cannot express "follow the system", which is what most
+   readers want and what the page starts on. */
+.theme-btn { border: 0; background: transparent; cursor: pointer;
+  padding: 5px 9px; border-radius: 4px; line-height: 1;
+  font-size: 13px; color: var(--slate-600); display: grid;
+  place-items: center; min-width: 30px; }
+.theme-btn:hover { background: var(--slate-200); }
+.theme-btn.active { background: var(--surface); color: var(--accent);
+  box-shadow: var(--shadow); }
+.lang-btn {
+  border: 0; background: transparent; cursor: pointer;
+  padding: 5px 11px; border-radius: 4px;
+  font-size: 12px; font-weight: 600; color: var(--slate-600);
+}
+.lang-btn:hover { background: var(--slate-200); }
+.lang-btn.active { background: var(--surface); color: var(--accent);
+  box-shadow: var(--shadow); }
+
+/* ---------- layout ---------- */
+.body { display: flex; flex: 1; align-items: flex-start; }
+.sidebar {
+  width: 220px; flex-shrink: 0; padding: 16px 10px;
+  background: var(--surface); border-right: 1px solid var(--slate-200);
+  min-height: calc(100vh - 59px);
+  display: flex; flex-direction: column; gap: 2px;
+  position: sticky; top: 59px;
+}
+.nav-item {
+  text-align: left; border: 0; background: transparent; cursor: pointer;
+  padding: 9px 12px; border-radius: var(--radius);
+  font-size: 13.5px; color: var(--slate-700); font-weight: 500;
+}
+.nav-item:hover { background: var(--slate-100); }
+.nav-item.active { background: var(--accent-soft); color: var(--accent-dark); font-weight: 600; }
+
+.content { flex: 1; padding: 22px 26px; max-width: 1680px; min-width: 0; }
+
+/* ---------- primitives ---------- */
+h2 { font-size: 20px; font-weight: 650; margin-bottom: 4px; }
+h3 { font-size: 15px; font-weight: 620; margin-bottom: 12px; }
+.page-hint { color: var(--slate-500); font-size: 13px; margin-bottom: 18px; max-width: 78ch; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--slate-200);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.card.flush { padding: 0; overflow: auto; }
+/* `auto` rather than `hidden`: the rounded corners are still clipped, but a
+   table too wide for its card now scrolls inside it instead of losing its last
+   column with nothing to show the reader it was ever there. */
+
+.grid { display: grid; gap: 16px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.split { display: grid; grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  gap: 16px; align-items: start; }
+/* minmax(0, 1fr) on the right, not plain 1fr: a grid track defaults to
+   min-content, so a wide table would push the whole layout out instead of
+   scrolling inside its own card. */
+
+.stat { text-align: left; }
+.stat-value { font-size: 26px; font-weight: 680; font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 12.5px; color: var(--slate-500); margin-top: 2px; }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; font-weight: 600; color: var(--slate-600);
+  padding: 9px 12px; background: var(--slate-50);
+  border-bottom: 1px solid var(--slate-200); white-space: nowrap;
+}
+td { padding: 9px 12px; border-bottom: 1px solid var(--slate-100); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--slate-50); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* A row carrying a control reads better centred: otherwise the select floats
+   above the text in the cell beside it. */
+tbody tr:has(select, input, textarea) > td { vertical-align: middle; }
+
+/* Column sizing.
+   `width: 1%` with `nowrap` is the shrink-to-content idiom: the column takes
+   exactly what it needs and the growing column absorbs everything else. */
+.col-shrink, .col-actions { width: 1%; white-space: nowrap; }
+.col-grow { width: 100%; }
+.col-wrap { white-space: normal; min-width: 16ch; }
+
+/* Controls sit in a cell at their own size, not at the column's size. Left at
+   100% they dictate the column width, which is how a two-digit number ends up
+   with a box wide enough for a sentence. */
+td > select { width: auto; min-width: 8.5rem; max-width: 100%; }
+td > input:not([type="checkbox"]):not([type="radio"]) {
+  width: auto; min-width: 7rem; max-width: 100%;
+}
+td > input[type="number"] { width: 5.5rem; min-width: 0; text-align: right; }
+td > input[type="date"] { width: 9.5rem; min-width: 0; }
+td .btn-row { flex-wrap: nowrap; }
+
+/* A scrolling region keeps its header visible; without this you lose track of
+   which column you are reading a third of the way down a long list. */
+.scroll-y { overflow-y: auto; }
+.scroll-y thead th { position: sticky; top: 0; z-index: 2; }
+
+/* ---------- badges ---------- */
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11.5px; font-weight: 600; white-space: nowrap;
+}
+.badge-ok   { background: var(--ok-bg);   color: var(--ok); }
+.badge-warn { background: var(--warn-bg); color: var(--warn); }
+.badge-bad  { background: var(--bad-bg);  color: var(--bad); }
+.badge-mute { background: var(--slate-200); color: var(--slate-600); }
+.badge-conf { background: var(--conf-bg); color: var(--conf);
+  border: 1px solid var(--conf-border); }
+
+/* A select that carries a status colour, so the value and its severity are one
+   control instead of a control with a label repeated beneath it. */
+.select-critical { border-color: var(--bad-border); background: var(--bad-bg);
+  color: var(--bad); font-weight: 600; }
+.select-must { border-color: var(--warn-border); background: var(--warn-bg);
+  color: var(--warn); font-weight: 600; }
+.select-nice { border-color: var(--slate-300); background: var(--slate-50);
+  color: var(--slate-600); font-weight: 600; }
+
+/* ---------- buttons ---------- */
+.btn {
+  border: 1px solid transparent; border-radius: var(--radius);
+  padding: 8px 14px; font-size: 13px; font-weight: 550;
+  cursor: pointer; background: var(--accent); color: var(--on-accent);
+}
+.btn:hover { background: var(--accent-dark); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-ghost { background: var(--surface); color: var(--slate-700);
+  border-color: var(--slate-300); }
+.btn-ghost:hover { background: var(--slate-50); }
+.btn-danger { background: var(--surface); color: var(--bad);
+  border-color: var(--bad-border); }
+.btn-danger:hover { background: var(--bad-bg); }
+.btn-sm { padding: 4px 9px; font-size: 12px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- forms ---------- */
+.field { margin-bottom: 12px; }
+label { display: block; font-size: 12.5px; font-weight: 550;
+  color: var(--slate-600); margin-bottom: 4px; }
+input, select, textarea {
+  width: 100%; padding: 7px 10px; font-size: 13px;
+  border: 1px solid var(--slate-300); border-radius: var(--radius);
+  background: var(--surface); color: var(--slate-900); font-family: inherit;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+textarea { min-height: 70px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ---------- alerts ---------- */
+.alert { padding: 10px 13px; border-radius: var(--radius);
+  font-size: 13px; margin-bottom: 14px; border: 1px solid; }
+.alert-info { background: var(--accent-soft); border-color: var(--accent);
+  color: var(--accent-dark); }
+.alert-ok   { background: var(--ok-bg);   border-color: var(--ok);   color: var(--ok); }
+.alert-warn { background: var(--warn-bg); border-color: var(--warn-border);
+  color: var(--warn); }
+.alert-bad  { background: var(--bad-bg);  border-color: var(--bad-border);
+  color: var(--bad); }
+
+/* ---------- tabs ---------- */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--slate-200);
+  margin-bottom: 16px; overflow-x: auto; }
+.tab {
+  border: 0; background: transparent; cursor: pointer;
+  padding: 9px 14px; font-size: 13px; font-weight: 550; color: var(--slate-600);
+  border-bottom: 2px solid transparent; white-space: nowrap;
+}
+.tab:hover { color: var(--slate-900); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------- list / selection ---------- */
+.list { max-height: 620px; overflow-y: auto; }
+.list-row {
+  padding: 10px 12px; border-bottom: 1px solid var(--slate-100);
+  cursor: pointer; display: flex; justify-content: space-between; gap: 10px;
+}
+.list-row:hover { background: var(--slate-50); }
+.list-row.active { background: var(--accent-soft); }
+.list-title { font-weight: 570; font-size: 13.5px; }
+.list-sub { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+
+/* ---------- readiness / score ---------- */
+.score-big { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.meter { height: 6px; background: var(--slate-200); border-radius: 3px; overflow: hidden; }
+.meter-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+/* Requirement calculation rows */
+.req-row { border-left: 3px solid var(--slate-300); }
+.req-row.met         { border-left-color: var(--ok); }
+.req-row.partial     { border-left-color: var(--warn); }
+.req-row.compensated { border-left-color: var(--accent); }
+.req-row.gap         { border-left-color: var(--bad); }
+.req-row.not_assessed{ border-left-color: var(--slate-400); }
+
+/* Confidential zone */
+.confidential {
+  border: 1px solid var(--conf-border); background: var(--conf-bg);
+  border-radius: var(--radius); padding: 12px; margin-bottom: 14px;
+}
+
+/* Field/value pairs on a profile: a real two-column layout rather than a
+   table pretending to be one, so the labels align and the values wrap. */
+.facts { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; }
+.facts > div {
+  padding: 9px 14px; border-bottom: 1px solid var(--slate-100);
+  font-size: 13px; min-width: 0; overflow-wrap: anywhere;
+}
+.facts > div:nth-child(odd) { color: var(--slate-500); }
+.facts > div:nth-last-child(-n+2) { border-bottom: 0; }
+@media (max-width: 640px) { .facts { grid-template-columns: 1fr; }
+  .facts > div:nth-child(odd) { padding-bottom: 0; border-bottom: 0; } }
+
+.mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; }
+.muted { color: var(--slate-500); }
+.spinner {
+  width: 22px; height: 22px; border: 2.5px solid var(--slate-200);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin .6s linear infinite; margin: 30px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty { text-align: center; padding: 34px; color: var(--slate-500); font-size: 13px; }
+
+@media (max-width: 1400px) {
+  .form-row-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 1100px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .content { padding: 18px 16px; }
+}
+@media (max-width: 800px) {
+  .sidebar { width: 60px; }
+  .nav-item { font-size: 11px; padding: 8px 4px; text-align: center; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .stat-value { font-size: 22px; }
+}

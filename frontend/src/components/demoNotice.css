@@ -1,0 +1,18 @@
+.demo-banner {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .2rem .75rem;
+  margin-bottom: 1rem;
+  padding: .65rem 1rem;
+  border-inline-start: .25rem solid var(--accent);
+  color: var(--slate-900);
+  background: var(--accent-soft);
+  font-size: .875rem;
+}
+.demo-assistant { display: flex; align-items: flex-start; gap: 1rem; }
+.demo-assistant-mark { flex: none; border-radius: .65rem; padding: .6rem; background: var(--accent-soft); color: var(--accent); }
+.demo-assistant-mark svg { display: block; }
+.demo-assistant h1 { margin: 0; font-size: 1.35rem; }
+.demo-assistant p { margin: .35rem 0 0; max-width: 62ch; color: var(--slate-600); }
+

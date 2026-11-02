@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: digital-profile-demo
+    runtime: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: TZ
+        value: Asia/Almaty
+      - key: DATABASE_URL
+        fromDatabase:
+          name: digital-profile-demo-db
+          property: connectionString
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: DEMO_ADMIN_USERNAME
+        value: presenter
+      - key: DEMO_ADMIN_PASSWORD
+        generateValue: true
+      - key: DEMO_VIEWER_USERNAME
+        value: customer
+      - key: DEMO_VIEWER_PASSWORD
+        generateValue: true
+
+databases:
+  - name: digital-profile-demo-db
+    databaseName: digital_profile_demo
+    region: frankfurt
+    postgresMajorVersion: "15"
+    plan: free
+    ipAllowList: []

@@ -1,0 +1,104 @@
+.worklist-toolbar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.worklist-toolbar input[type="search"] { flex:1; min-width:180px; }
+.worklist-toolbar select { width:auto; max-width:260px; }
+.worklist-toolbar .field { flex:1; margin:0; min-width:190px; }
+.worklist-pagination { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:10px 14px; border-top:1px solid var(--slate-200); font-size:12px; }
+.worklist-pagination .btn-row { flex-wrap:nowrap; }
+.worklist-pagination span { color:var(--text-muted, var(--slate-500)); }
+.worklist-section { margin-bottom:14px; }
+.worklist-section > summary { cursor:pointer; font-weight:600; padding:12px 14px; }
+.worklist-section[open] > summary { border-bottom:1px solid var(--slate-200); margin-bottom:12px; }
+.worklist-section .worklist-toolbar { margin:0 14px 12px; }
+.worklist-section > form { padding:0 14px 14px; }
+.worklist-table-scroll { overflow:auto; max-height:440px; }
+.worklist-table-scroll thead { position:sticky; top:0; z-index:1; background:var(--surface, var(--bg-card, #fff)); }
+.worklist-table-scroll tbody tr.active { background:var(--accent-soft); }
+.worklist-select { display:block; width:100%; text-align:left; white-space:normal; padding:0; border:0; background:none; color:inherit; cursor:pointer; font:inherit; }
+.worklist-select:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.worklist-select strong { display:block; font-size:13px; }
+.worklist-select small { display:block; margin-top:3px; }
+.matching-workspace { display:grid; grid-template-columns:minmax(340px, .9fr) minmax(360px, 1.1fr); align-items:start; gap:16px; }
+.matching-workspace > * { min-width:0; }
+.matching-workspace .card { margin-bottom:12px; }
+.matching-workspace .score-big { font-size:26px; }
+.matching-summary { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; margin:0 0 12px; }
+.matching-summary strong { color:var(--text); }
+.matching-score-box { padding-top:12px; margin-top:12px; border-top:1px solid var(--slate-200); }
+.matching-score-box p { margin:5px 0 0; font-size:12px; }
+.structure-layout { grid-template-columns:minmax(340px, .85fr) minmax(380px, 1.15fr) !important; align-items:start; }
+.structure-layout > * { min-width:0; }
+.structure-tree-scroll { max-height:calc(100vh - 315px); min-height:220px; overflow:auto; }
+.structure-tree-scroll thead { position:sticky; top:0; z-index:1; background:var(--surface, var(--bg-card, #fff)); }
+.structure-tree-scroll td, .structure-tree-scroll th { padding-top:8px; padding-bottom:8px; }
+.structure-tree-scroll .org-unit-name { text-align:left; white-space:normal; }
+.structure-guide { padding:0 14px 12px; font-size:12px; }
+.structure-guide summary { cursor:pointer; font-weight:600; }
+.structure-guide li { margin:7px 0; line-height:1.5; }
+.structure-members-toolbar { padding:10px 14px; border-bottom:1px solid var(--slate-200); }
+.structure-person-name { display:flex; gap:8px; align-items:baseline; cursor:pointer; border:0; padding:3px 0; background:transparent; color:var(--accent-dark); font:inherit; font-weight:600; text-align:left; overflow-wrap:anywhere; }
+.structure-person-name:focus-visible, .structure-person-detail a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.structure-person-chevron { flex:none; width:6px; height:6px; border:solid currentColor; border-width:0 1.5px 1.5px 0; transform:rotate(-45deg); }
+.structure-person-name[aria-expanded=true] .structure-person-chevron { transform:rotate(45deg); }
+.structure-person-meta { display:block; margin-top:3px; font-size:11px; color:var(--slate-600); }
+.structure-person-name + .structure-person-meta { padding-left:14px; }
+.structure-person-detail { background:var(--surface-2); }
+.structure-person-detail section { padding:4px 0 4px 12px; border-left:3px solid var(--accent); white-space:normal; }
+.structure-person-detail dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(145px,100%),1fr)); gap:10px 14px; margin:0 0 10px; }
+.structure-person-detail dt { color:var(--slate-600); font-size:12px; }
+.structure-person-detail dd { margin:3px 0 0; overflow-wrap:anywhere; }
+.structure-person-detail a { color:var(--accent-dark); text-underline-offset:3px; font-size:13px; }
+.structure-unit-ranking { display:inline-block; margin-top:7px; color:var(--accent-dark); font-size:13px; text-underline-offset:3px; }
+.structure-transfer { padding:14px; border-top:1px solid var(--slate-200); }
+.structure-transfer h3 { margin:0 0 10px; }
+.structure-segments { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.structure-segments .btn { display:flex; gap:8px; align-items:center; }
+@media (max-width:1150px) { .matching-workspace, .structure-layout { grid-template-columns:minmax(0, 1fr) !important; } .structure-tree-scroll { max-height:360px; } }
+@media (max-width:600px) { .worklist-toolbar > * { flex-basis:100%; max-width:none !important; } .worklist-pagination { flex-wrap:wrap; } }
+
+.vacancy-workspace { display: grid; grid-template-columns: minmax(250px, .7fr) minmax(0, 1.3fr); gap: 18px; align-items: start; }
+.vacancy-workspace .list-row { width: 100%; text-align: left; border-radius: 0; }
+.vacancy-workspace .list-row.active { background: var(--accent-light, var(--surface)); }
+.vacancy-workspace .list-row small { display: block; margin-top: 5px; }
+@media (max-width: 900px) { .vacancy-workspace { grid-template-columns: 1fr; } }
+
+.matching-result-row { cursor:pointer; }
+.matching-result-row .badge { margin-top:6px; }
+.matching-points { display:block; margin-top:4px; white-space:nowrap; color:var(--text-muted, var(--slate-500)); }
+.recruitment-result-heading { display:flex; gap:12px; align-items:start; justify-content:space-between; flex-wrap:wrap; }
+.recruitment-result-heading h3 { margin:0; }
+.recruitment-score { text-align:right; }
+.recruitment-score strong { display:block; font-size:26px; color:var(--accent); line-height:1.2; }
+.recruitment-score span { display:block; margin-top:4px; font-size:12px; }
+.recruitment-context { font-size:12px; margin:10px 0; line-height:1.5; }
+.recruitment-review { margin:12px 0 0; font-size:12px; }
+.recruitment-review div { margin-top:4px; }
+.recruitment-decision p, .recruitment-appointment p { font-size:13px; line-height:1.5; margin:10px 0; }
+.recruitment-reason { white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; }
+.recruitment-decision-form { border-top:1px solid var(--slate-200); margin-top:14px; padding-top:14px; }
+.recruitment-next { margin-top:14px; }
+.recruitment-gaps { padding:12px 14px; font-size:12px; }
+.recruitment-gaps p { margin-top:6px; }
+.recruitment-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:16px 0; }
+.recruitment-metrics > div { padding:10px; border:1px solid var(--slate-200); border-radius:8px; }
+.recruitment-metrics strong { font-size:22px; display:block; line-height:1.2; }
+.recruitment-metrics span { font-size:11px; display:block; margin-top:4px; color:var(--text-muted,var(--slate-500)); }
+.recruitment-latest { display:flex; justify-content:space-between; gap:10px; font-size:12px; flex-wrap:wrap; padding-bottom:14px; }
+.recruitment-candidate-toolbar { padding-top:14px; border-top:1px solid var(--slate-200); margin-bottom:12px; }
+.recruitment-candidate-toolbar h4 { flex:1; margin:0; font-size:13px; }
+.recruitment-candidates { display:grid; gap:8px; }
+.recruitment-candidate { border:1px solid var(--slate-200); border-radius:8px; padding:12px; font-size:12px; }
+.recruitment-candidate .recruitment-result-heading + .recruitment-result-heading { margin-top:6px; }
+.recruitment-name { font-size:13px; font-weight:650; text-decoration:none; }
+.recruitment-candidate-score { white-space:nowrap; }
+.recruitment-candidate p { margin:7px 0; }
+.recruitment-candidate .worklist-toolbar { margin-top:9px; }
+.recruitment-empty { padding:6px 0; font-size:13px; }
+.recruitment-empty p { margin:6px 0; }
+.recruitment-close { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; border-top:1px solid var(--slate-200); margin-top:16px; padding-top:12px; font-size:12px; }
+.recruitment-vacancy-meta { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:12px 0; font-size:12px; color:var(--text-muted,var(--slate-500)); }
+.recruitment-conditions { margin-top:10px; font-size:12px; }
+.recruitment-conditions summary { cursor:pointer; font-weight:600; }
+.recruitment-conditions p { margin:8px 0; }
+@media (max-width:600px) { .recruitment-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .recruitment-candidate-score { white-space:normal; } }
+
+.vacancy-workspace .list-row.active { box-shadow: inset 3px 0 var(--accent); }

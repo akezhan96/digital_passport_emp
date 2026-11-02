@@ -1,0 +1,11 @@
+fastapi==0.141.1
+uvicorn==0.53.0
+sqlalchemy==2.0.54
+psycopg2-binary==2.9.13
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-multipart==0.0.32
+python-dateutil==2.9.0.post0
+# Document generation (employee CV as PDF / DOCX)
+reportlab==5.0.1
+python-docx==1.2.0

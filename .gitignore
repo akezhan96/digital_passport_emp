@@ -1,0 +1,14 @@
+/.env*
+**/__pycache__/
+**/node_modules/
+**/dist/
+*.pyc
+*.log
+*.tmp
+*.zip
+*.tar
+*.dump
+*.sqlite*
+/uploads/
+/backups/
+/config.env

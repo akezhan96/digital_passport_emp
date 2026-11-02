@@ -1,0 +1,14 @@
+.disposal-stats > header, .disposal-tools { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem; }
+.disposal-stats > header h3 { margin: 0; }
+.disposal-unit { display: grid; gap: .35rem; width: min(28rem, 100%); font-size: .85rem; margin-top: 1rem; }
+.disposal-counts { margin: 1rem 0 .75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: .7rem; }
+.disposal-counts > div { background: var(--slate-50); padding: .8rem 1rem; border: 1px solid var(--slate-200); border-radius: var(--radius); }
+.disposal-counts dt, .disposal-stats > header span { font-size: .8rem; color: var(--slate-600); }
+.disposal-counts dd { margin: .2rem 0 0; font-size: 1.55rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.disposal-tools { justify-content: flex-end; margin-bottom: .6rem; }
+.disposal-table { overflow-x: auto; }
+.disposal-table table { min-width: 33rem; }
+.disposal-table tbody th { background: transparent; color: inherit; border-bottom: 1px solid var(--slate-100); }
+.disposal-table a { color: var(--accent-dark); text-decoration: underline; text-underline-offset: 3px; }
+.disposal-stats details { margin-top: .8rem; }
+.disposal-stats summary { cursor: pointer; width: fit-content; }

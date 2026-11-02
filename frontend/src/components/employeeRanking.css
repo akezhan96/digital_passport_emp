@@ -1,0 +1,22 @@
+.analytics-views a, .dashboard-columns a.quick-action { text-decoration: none; }
+.employee-ranking { min-width: 0; }
+.employee-ranking > header h3 { margin: 0; }
+.employee-ranking > header p { margin: 4px 0 16px; }
+.employee-ranking-filters { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; }
+.employee-ranking-filters > label { flex: 1 1 240px; min-width: 0; font-size: 13px; font-weight: 600; }
+.employee-ranking-filters select { width: 100%; margin-top: 5px; }
+.employee-ranking-filters .employee-ranking-check { flex: 0 1 auto; display: flex; align-items: center; gap: 7px; min-height: 36px; }
+.employee-ranking-check input { width: auto; }
+.employee-ranking-summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; min-height: 36px; margin: 12px 0 6px; font-size: 13px; }
+.employee-ranking-scroll { overflow-x: auto; }
+.employee-ranking table { min-width: 520px; }
+.employee-ranking tbody th { background: transparent; color: inherit; border-bottom: 1px solid var(--slate-100); white-space: normal; overflow-wrap: anywhere; }
+.employee-ranking tbody a { color: var(--accent-dark); text-decoration: underline; text-underline-offset: 3px; }
+.employee-ranking-place { display: inline-grid; place-items: center; min-width: 2em; height: 2em; border-radius: var(--radius); font-variant-numeric: tabular-nums; }
+.employee-ranking-place.is-leading { background: var(--accent-soft); color: var(--accent-dark); font-weight: 700; }
+.employee-ranking-points, .employee-ranking-percent { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.employee-ranking-percent > span { display: inline-block; width: 48px; height: 4px; vertical-align: middle; margin-left: 7px; background: var(--slate-200); border-radius: 4px; overflow: hidden; }
+.employee-ranking-percent i { display: block; height: 100%; background: var(--accent); }
+.employee-ranking-rules { margin-top: 12px; font-size: 13px; color: var(--slate-600); }
+.employee-ranking-rules summary { width: fit-content; cursor: pointer; }
+.employee-ranking-rules p { margin: 6px 0 0; }
