@@ -1,0 +1,44 @@
+name: digital_profile_local_demo
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: digital_profile_demo
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: ${DEMO_DB_PASSWORD:?Local credentials file is missing}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "demo", "-d", "digital_profile_demo"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:10000"
+    environment:
+      APP_ENV: production
+      TZ: Asia/Almaty
+      DEMO_PUBLIC_ORIGIN: http://localhost:8080
+      DATABASE_URL: postgresql://demo:${DEMO_DB_PASSWORD:?Local credentials file is missing}@db:5432/digital_profile_demo
+      AUTH_SECRET: ${DEMO_AUTH_SECRET:?Local credentials file is missing}
+      DEMO_ADMIN_USERNAME: presenter
+      DEMO_ADMIN_PASSWORD: ${PRESENTER_PASSWORD:?Local credentials file is missing}
+      DEMO_VIEWER_USERNAME: customer
+      DEMO_VIEWER_PASSWORD: ${CUSTOMER_PASSWORD:?Local credentials file is missing}
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://localhost:10000/health', timeout=3).close()"]
+      interval: 5s
+      timeout: 4s
+      start_period: 15s
+      retries: 30
+
+volumes:
+  database:
