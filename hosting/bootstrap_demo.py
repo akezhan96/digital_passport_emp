@@ -1,12 +1,13 @@
 """One-time setup of a dedicated synthetic Render database; run before starting the API."""
 import os
+import re
 from datetime import date, timedelta
 
 from fastapi import Request
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from auth import hash_password
+from auth import PBKDF2_ROUNDS, hash_password
 from database import engine
 from models import (Base, CandidateEvaluation, Country, EducationLevel, Language, LanguageLevel,
                     LanguageScale, OrgUnit, User, Vacancy)
@@ -70,6 +71,26 @@ def _accounts():
         accounts.append(User(username=login, password_hash=hash_password(password), role=role,
                              display_name=login, is_active=True))
     return accounts
+
+
+def _add_initial_viewer(connection):
+    """Optionally create a guest once in the marked demo DB, without changing existing users."""
+    credential = os.getenv("DEMO_INITIAL_VIEWER", "")
+    if not credential:
+        return
+    username, _, digest = credential.partition(":")
+    expected_digest = rf"pbkdf2\${PBKDF2_ROUNDS}\$[0-9a-f]{{32}}\$[0-9a-f]{{64}}"
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,60}", username) or not re.fullmatch(expected_digest, digest):
+        raise ValueError("DEMO_INITIAL_VIEWER requires username:password_hash.")
+    with Session(bind=connection, join_transaction_mode="create_savepoint") as db:
+        existing = db.query(User).filter_by(username=username).one_or_none()
+        if existing is not None:
+            if existing.role != "viewer" or existing.password_hash != digest:
+                raise RuntimeError("Guest username already belongs to another account.")
+            return
+        db.add(User(username=username, password_hash=digest, role="viewer",
+                    display_name=username, is_active=True))
+        db.commit()
 
 
 def _create_dossier_method(db, people):
@@ -164,6 +185,7 @@ def bootstrap_demo():
         _check_database(connection)
         connection.execute(text("SELECT pg_advisory_xact_lock(61652024)"))
         if _is_ready(connection):
+            _add_initial_viewer(connection)
             return False
         # Refuse other people's objects in any user schema, even if there are no employees.
         # Extension-owned objects installed by the PostgreSQL provider are allowed.
@@ -186,6 +208,7 @@ def bootstrap_demo():
             db.commit()
         connection.execute(text(f"CREATE TABLE {MARKER_TABLE} (fixture text PRIMARY KEY)"))
         connection.execute(text(f"INSERT INTO {MARKER_TABLE} (fixture) VALUES (:marker)"), {"marker": MARKER})
+        _add_initial_viewer(connection)
     return True
 
 
